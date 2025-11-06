@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Private Gallery</title>
+    <style>
+        body { font-family: Arial; background: #f9f9f9; text-align: center; }
+        .top-bar { margin: 20px; }
+        .gallery { display: flex; flex-wrap: wrap; justify-content: center; }
+        .gallery div { margin: 10px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        img { width: 200px; height: 200px; object-fit: cover; border-radius: 5px; }
+        button { margin-top: 5px; background: red; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+        button:hover { background: darkred; }
+    </style>
+</head>
+<body>
+    <div style="text-align:center; margin-bottom: 20px;">
+        <h2>My Gallery🗃</h2>
+    </div>
+
+    <div class="top-bar">
+        <h2>📸 Welcome, {{ session['user'] }}</h2>
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file[]" multiple required>
+            <button type="submit">Upload</button>
+        </form>
+        <a href="{{ url_for('logout') }}">🚪 Logout</a>
+    </div>
+
+    <div class="gallery">
+        {% for image in images %}
+        <div>
+            <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="{{ image }}">
+            <form action="{{ url_for('delete', filename=image) }}" method="POST">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        {% else %}
+        <p>No images yet. Upload some!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
